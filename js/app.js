@@ -1146,6 +1146,7 @@ const Loader = {
   hide: function(sec) {
     if(!CONFIG.loader.start)
       sec = -1
+    loadCat.attr('style', 'display:false');
     this.timer = setTimeout(this.vanish, sec||3000);
   },
   vanish: function() {
@@ -1154,6 +1155,7 @@ const Loader = {
     if(CONFIG.loader.start)
       transition(loadCat, 0)
     document.body.addClass('loaded');
+    loadCat.attr('style', 'display:false');
     Loader.lock = true;
   }
 }
