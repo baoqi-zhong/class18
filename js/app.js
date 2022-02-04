@@ -1114,7 +1114,7 @@ var originTitle, titleTime;
 const BODY = document.getElementsByTagName('body')[0];
 const HTML = document.documentElement;
 const Container = $('#container');
-const loadCat = $('#loading');
+
 const siteNav = $('#nav');
 const siteHeader = $('#header');
 const menuToggle = siteNav.child('.toggle');
@@ -1134,29 +1134,8 @@ const lazyload = lozad('img, [data-background-image]', {
     }
 })
 
-const Loader = {
-  timer: null,
-  lock: false,
-  show: function() {
-    clearTimeout(this.timer);
-    document.body.removeClass('loaded');
-    loadCat.attr('style', 'display:block');
-    Loader.lock = false;
-  },
-  hide: function(sec) {
-    if(!CONFIG.loader.start)
-      sec = -1
-    this.timer = setTimeout(this.vanish, sec||3000);
-  },
-  vanish: function() {
-    if(Loader.lock)
-      return;
-    if(CONFIG.loader.start)
-      transition(loadCat, 0)
-    document.body.addClass('loaded');
-    Loader.lock = true;
-  }
-}
+
+
 
 const changeTheme = function(type) {
   var btn = $('.theme .ic')
@@ -1235,28 +1214,7 @@ const themeColorListener = function () {
   });
 }
 
-const visibilityListener = function () {
-  document.addEventListener('visibilitychange', function() {
-    switch(document.visibilityState) {
-      case 'hidden':
-        $('[rel="icon"]').attr('href', statics + CONFIG.favicon.hidden);
-        document.title = LOCAL.favicon.hide;
-        if(CONFIG.loader.switch)
-          Loader.show()
-        clearTimeout(titleTime);
-      break;
-      case 'visible':
-        $('[rel="icon"]').attr('href', statics + CONFIG.favicon.normal);
-        document.title = LOCAL.favicon.show;
-        if(CONFIG.loader.switch)
-          Loader.hide(1000)
-        titleTime = setTimeout(function () {
-          document.title = originTitle;
-        }, 2000);
-      break;
-    }
-  });
-}
+
 
 const showtip = function(msg) {
   if(!msg)
@@ -2176,7 +2134,7 @@ const domInit = function() {
     siteNav.child('.menu').appendChild(el.cloneNode(true));
   })
 
-  loadCat.addEventListener('click', Loader.vanish);
+
   menuToggle.addEventListener('click', sideBarToggleHandle);
   $('.dimmer').addEventListener('click', sideBarToggleHandle);
 
@@ -2216,7 +2174,7 @@ const pjaxReload = function () {
   }
 
   $('#main').innerHTML = ''
-  $('#main').appendChild(loadCat.lastChild.cloneNode(true));
+
   pageScroll(0);
 }
 
@@ -2263,7 +2221,6 @@ const siteRefresh = function (reload) {
 
   toolPlayer.player.load(LOCAL.audio || CONFIG.audio || {})
 
-  Loader.hide()
 
   setTimeout(function(){
     positionInit()
@@ -2292,7 +2249,7 @@ const siteInit = function () {
   CONFIG.quicklink.ignores = LOCAL.ignores
   quicklink.listen(CONFIG.quicklink)
 
-  visibilityListener()
+
   themeColorListener()
 
   algoliaSearch(pjax)
