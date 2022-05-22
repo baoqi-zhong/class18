@@ -1,4 +1,4 @@
-var CONFIG = {"version":"0.2.5","hostname":"https://baoqi.js.org/class18","root":"/class18/","statics":"/","favicon":{"normal":"images/favicon.ico","hidden":"images/failure.ico"},"darkmode":false,"auto_scroll":true,"js":{"valine":"gh/amehime/MiniValine@4.2.2-beta10/dist/MiniValine.min.js","chart":"npm/frappe-charts@1.5.0/dist/frappe-charts.min.iife.min.js","copy_tex":"npm/katex@0.12.0/dist/contrib/copy-tex.min.js","fancybox":"combine/npm/jquery@3.5.1/dist/jquery.min.js,npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js,npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"},"css":{"valine":"css/comment.css","katex":"npm/katex@0.12.0/dist/katex.min.css","mermaid":"css/mermaid.css","fancybox":"combine/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css,npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"},"loader":{"start":false,"switch":false},"search":null,"valine":{"appId":null,"appKey":null,"placeholder":"ヽ(○´∀`)ﾉ♪","avatar":"mp","pageSize":10,"lang":"en","visitor":true,"NoRecordIP":false,"serverURLs":null,"powerMode":true,"tagMeta":{"visitor":"新朋友","master":"主人","friend":"小伙伴","investor":"none"},"tagColor":{"master":"var(--color-orange)","friend":"var(--color-aqua)"},"tagMember":{"master":null,"friend":null,"investor":null}},"quicklink":{"timeout":3000,"priority":false},"fireworks":["rgba(255,182,185,.9)","rgba(250,227,217,.9)","rgba(187,222,214,.9)","rgba(138,198,209,.9)"]};const getRndInteger = function (min, max) {
+var CONFIG = {"version":"0.2.5","hostname":"https://baoqi.js.org/class18","root":"/class18/","statics":"/","favicon":{"normal":"images/favicon.ico","hidden":"images/failure.ico"},"darkmode":false,"auto_scroll":true,"js":{"valine":"cdn_backup/amehime/MiniValine/MiniValine.min.js","chart":"cdn_backup/frappe-charts/frappe-charts.min.iife.min.js","copy_tex":"cdn_backup/katex/contrib/copy-tex.min.js","fancybox":"cdn_backup/combine/combine.js"},"css":{"valine":"css/comment.css","katex":"npm/katex@0.12.0/dist/katex.min.css","mermaid":"css/mermaid.css","fancybox":"class18/cdn_backup/combine/combine.js"},"loader":{"start":false,"switch":false},"search":null,"valine":{"appId":null,"appKey":null,"placeholder":"ヽ(○´∀`)ﾉ♪","avatar":"mp","pageSize":10,"lang":"en","visitor":true,"NoRecordIP":false,"serverURLs":null,"powerMode":true,"tagMeta":{"visitor":"新朋友","master":"主人","friend":"小伙伴","investor":"none"},"tagColor":{"master":"var(--color-orange)","friend":"var(--color-aqua)"},"tagMember":{"master":null,"friend":null,"investor":null}},"quicklink":{"timeout":3000,"priority":true},"fireworks":["rgba(255,182,185,.9)","rgba(250,227,217,.9)","rgba(187,222,214,.9)","rgba(138,198,209,.9)"]};const getRndInteger = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -25,8 +25,6 @@ const getScript = function(url, callback, condition) {
 
 const assetUrl = function(asset, type) {
   var str = CONFIG[asset][type]
-  if(str.indexOf('npm')>-1||str.indexOf('gh')>-1||str.indexOf('combine')>-1)
-    return "//cdn.jsdelivr.net/" + str
 
   if(str.indexOf('http')>-1)
     return str
@@ -1146,16 +1144,14 @@ const Loader = {
   hide: function(sec) {
     if(!CONFIG.loader.start)
       sec = -1
-    transition(loadCat, 0);
     this.timer = setTimeout(this.vanish, sec||3000);
   },
   vanish: function() {
     if(Loader.lock)
       return;
     if(CONFIG.loader.start)
-      transition(loadCat, 0);
+      transition(loadCat, 0)
     document.body.addClass('loaded');
-    loadCat.attr('style', 'display:false');
     Loader.lock = true;
   }
 }
@@ -2230,7 +2226,21 @@ const siteRefresh = function (reload) {
   vendorJs('copy_tex');
   vendorCss('mermaid');
   vendorJs('chart');
+  vendorJs('valine', function() {
+    var options = Object.assign({}, CONFIG.valine);
+    options = Object.assign(options, LOCAL.valine||{});
+    options.el = '#comments';
+    options.pathname = LOCAL.path;
+    options.pjax = pjax;
+    options.lazyload = lazyload;
 
+    new MiniValine(options);
+
+    setTimeout(function(){
+      positionInit(1);
+      postFancybox('.v');
+    }, 1000);
+  }, window.MiniValine);
 
   if(!reload) {
     $.each('script[data-pjax]', pjaxScript);
