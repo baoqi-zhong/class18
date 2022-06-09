@@ -1,4 +1,4 @@
-var CONFIG = {"version":"0.2.5","hostname":"https://baoqi.js.org/class18","root":"/class18/","statics":"/","favicon":{"normal":"images/favicon.ico","hidden":"images/failure.ico"},"darkmode":false,"auto_scroll":true,"js":{"valine":"cdn_backup/amehime/MiniValine/MiniValine.min.js","chart":"cdn_backup/frappe-charts/frappe-charts.min.iife.min.js","copy_tex":"cdn_backup/katex/contrib/copy-tex.min.js","fancybox":"cdn_backup/combine/combine.js"},"css":{"valine":"css/comment.css","katex":"npm/katex@0.12.0/dist/katex.min.css","mermaid":"css/mermaid.css","fancybox":"class18/cdn_backup/combine/combine.js"},"loader":{"start":false,"switch":false},"search":null,"valine":{"appId":null,"appKey":null,"placeholder":"ヽ(○´∀`)ﾉ♪","avatar":"mp","pageSize":10,"lang":"en","visitor":true,"NoRecordIP":false,"serverURLs":null,"powerMode":true,"tagMeta":{"visitor":"新朋友","master":"主人","friend":"小伙伴","investor":"none"},"tagColor":{"master":"var(--color-orange)","friend":"var(--color-aqua)"},"tagMember":{"master":null,"friend":null,"investor":null}},"quicklink":{"timeout":3000,"priority":true},"fireworks":["rgba(255,182,185,.9)","rgba(250,227,217,.9)","rgba(187,222,214,.9)","rgba(138,198,209,.9)"]};const getRndInteger = function (min, max) {
+var CONFIG = {"version":"0.2.5","hostname":"http://baoqi.js.org/class18","root":"/class18/","statics":"/","favicon":{"normal":"images/favicon.ico","hidden":"images/failure.ico"},"darkmode":false,"auto_scroll":false,"js":{"valine":"/js/MiniValine.min.js","chart":"frappe-charts.min.iife.min.js","copy_tex":"copy-tex.min.js","fancybox":"combine.js"},"css":{"valine":"css/comment.css","katex":"katexdist/katex.min.css","mermaid":"css/mermaid.css","fancybox":"combine/fancyboxdist/jquery.fancybox.min.css,justifiedGallerydist/css/justifiedGallery.min.css"},"loader":{"start":false,"switch":false},"search":null,"valine":{"appId":null,"appKey":null,"placeholder":"ヽ(○´∀`)ﾉ♪","avatar":"mp","pageSize":10,"lang":"en","visitor":false,"NoRecordIP":false,"serverURLs":null,"powerMode":false,"tagMeta":{"visitor":"新朋友","master":"主人","friend":"小伙伴","investor":"none"},"tagColor":{"master":"var(--color-orange)","friend":"var(--color-aqua)"},"tagMember":{"master":null,"friend":null,"investor":null}},"quicklink":{"timeout":3000,"priority":true},"fireworks":["rgba(255,182,185,.9)","rgba(250,227,217,.9)","rgba(187,222,214,.9)","rgba(138,198,209,.9)"]};const getRndInteger = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -25,6 +25,8 @@ const getScript = function(url, callback, condition) {
 
 const assetUrl = function(asset, type) {
   var str = CONFIG[asset][type]
+  if(str.indexOf('npm')>-1||str.indexOf('gh')>-1||str.indexOf('combine')>-1)
+    return "//cdn.jsdelivr.net/" + str
 
   if(str.indexOf('http')>-1)
     return str
